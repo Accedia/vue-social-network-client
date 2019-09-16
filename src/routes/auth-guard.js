@@ -1,6 +1,6 @@
 import AuthService from '../services/AuthService';
 
-const authRouteName = 'auth';
+const authRouteName = 'sign-in';
 
 export default (to, from, next) => {
   if (to.matched.some(record => record.meta.authenticated === true)) {

@@ -10,7 +10,7 @@
             <v-form data-vv-scope="signInForm">
               <v-text-field
                 v-model="username"
-                label="Login"
+                label="Username"
                 name="username"
                 prepend-icon="person"
                 type="text"
@@ -41,7 +41,7 @@
           <v-card-actions>
             <span class="ml-3">
               No account?
-              <router-link to="/register">Sign up</router-link>
+              <router-link :to="{name: 'sign-up'}">Sign up</router-link>
             </span>
             <div class="flex-grow-1"></div>
             <v-btn color="primary" @click="signIn">Sign in</v-btn>

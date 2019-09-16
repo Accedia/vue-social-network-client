@@ -1,5 +1,6 @@
 import Home from '../pages/Home.vue';
 import Auth from '../pages/Auth.vue';
+import SingUp from '../pages/Sing-up.vue';
 
 export default [
   {
@@ -11,8 +12,13 @@ export default [
     },
   },
   {
-    path: '/auth',
-    name: 'auth',
+    path: '/sign-in',
+    name: 'sign-in',
     component: Auth,
+  },
+  {
+    path: '/sign-up',
+    name: 'sign-up',
+    component: SingUp,
   },
 ];
