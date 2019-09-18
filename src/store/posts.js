@@ -4,6 +4,7 @@ const state = {
   postsPerPage: 5,
   morePostsToBeLoaded: true,
   error: null,
+  loading: false,
 };
 
 const getters = {
@@ -12,7 +13,7 @@ const getters = {
 
 const mutations = {
   setPosts(state, posts) {
-    state.posts.push(posts);
+    state.posts = state.posts.concat(posts);
   },
   resetPosts(state) {
     state.posts = [];
@@ -25,6 +26,9 @@ const mutations = {
   },
   setError(state, error) {
     state.error = error;
+  },
+  setLoading(state, loading) {
+    state.loading = loading;
   },
 };
 
