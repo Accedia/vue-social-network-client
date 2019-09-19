@@ -81,7 +81,7 @@ export default {
       isLoading: 'loader/isLoading',
     }),
     anyFiltersApplied() {
-      return this.userId !== null;
+      return this.userId !== null || this.dateFilter !== null;
     },
   },
   methods: {
