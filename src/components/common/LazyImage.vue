@@ -27,7 +27,7 @@ export default {
     },
     loaderColor: {
       type: String,
-      default: 'grey lighten-5',
+      default: 'grey darken-5',
     },
   },
   methods: {

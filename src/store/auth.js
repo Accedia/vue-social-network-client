@@ -4,7 +4,9 @@ const state = {
 };
 
 const getters = {
-
+  isUserAuthenticated(state) {
+    return !!state.token && !!state.user;
+  },
 };
 
 const mutations = {
@@ -17,7 +19,10 @@ const mutations = {
 };
 
 const actions = {
-
+  logout({ commit }) {
+    commit('setToken', null);
+    commit('setToken', null);
+  },
 };
 
 export default {
