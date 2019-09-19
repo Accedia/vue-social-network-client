@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="500" class="mx-auto mb-10">
+  <v-card>
     <v-list-item>
       <v-list-item-avatar v-if="post.author.image">
         <lazy-image :src="post.author.image" width="100%"></lazy-image>

@@ -17,6 +17,12 @@ const mutations = {
   resetPosts(state) {
     state.posts = [];
   },
+  addPost(state, post) {
+    state.posts = [
+      post,
+      ...state.posts,
+    ];
+  },
   setMorePostsToBeLoaded(state, payload) {
     state.morePostsToBeLoaded = payload;
   },
