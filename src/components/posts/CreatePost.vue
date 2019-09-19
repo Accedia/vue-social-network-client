@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading">
+  <v-card v-if="user !== null" :loading="loading">
     <v-card-text class="py-6">
       <v-layout class="align-center">
         <v-list-item-avatar v-if="user.image">

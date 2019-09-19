@@ -33,7 +33,7 @@ class PostsService {
 
   createPost(post) {
     return axios
-      .post(POSTS_RESOURCE_URL, {post}, {
+      .post(POSTS_RESOURCE_URL, { post }, {
         headers: ApiService.getAuthorizationHeaderForRequest(),
       })
       .then(response => response.data)

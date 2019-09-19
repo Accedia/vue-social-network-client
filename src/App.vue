@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
 import AuthService from './services/AuthService';
 import Navbar from './components/layout/Navbar.vue';
 import PageProgressLoader from './components/common/PageProgressLoader.vue';
@@ -18,14 +19,18 @@ export default {
     PageProgressLoader,
     Navbar,
   },
+  methods: mapMutations({
+    setToken: 'auth/setToken',
+    setUser: 'auth/setUser',
+  }),
   mounted() {
     // If the user has singed in save his/her details in the Vuex store
     if (AuthService.isAuthorized()) {
       const token = AuthService.getUserTokenFromLocalStorage();
       const user = AuthService.getUserFromLocalStorage();
 
-      this.$store.commit('auth/setToken', token);
-      this.$store.commit('auth/setUser', user);
+      this.setToken(token);
+      this.setUser(user);
     }
   },
 };

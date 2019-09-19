@@ -3,10 +3,19 @@
     <v-row>
       <v-col sm="12" md="8" offset-lg="1" lg="7">
 
-        <create-post v-if="showCreatePostForm" class="mb-10"></create-post>
+        <create-post v-if="!anyFiltersApplied" class="mb-10"></create-post>
 
-        <div v-if="!isLoading && posts.length > 0 && !error">
+        <div v-if="!isLoading && !error && posts.length > 0">
           <post-card v-for="post in posts" :key="post.id" :post="post" class="mb-10"></post-card>
+
+          <v-btn
+            v-if="morePostsToBeLoaded"
+            color="grey lighten-2"
+            block
+            :loading="loadingMore"
+            @click="loadMorePosts">
+            Load more
+          </v-btn>
         </div>
 
         <v-alert v-if="!isLoading && error !== null" type="error">
@@ -20,9 +29,20 @@
       </v-col>
       <v-col sm="12" md="4" lg="3">
         <v-card>
-          <v-card-text>
+          <v-card-title>
             Filters
+          </v-card-title>
+
+          <v-card-text>
+            <date-picker></date-picker>
           </v-card-text>
+
+          <v-card-actions v-if="anyFiltersApplied">
+            <v-btn
+              @click="resetFilters"
+              small
+              text>Clear all</v-btn>
+          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -34,15 +54,17 @@ import { mapState, mapGetters, mapMutations } from 'vuex';
 import PostsService from '../services/PostsService';
 import CreatePost from '../components/posts/CreatePost.vue';
 import PostCard from '../components/posts/PostCard.vue';
+import DatePicker from '../components/posts/DatePicker.vue';
 
 export default {
   components: {
     CreatePost,
+    DatePicker,
     PostCard,
   },
   data() {
     return {
-      userId: null,
+      loadingMore: false,
     };
   },
   computed: {
@@ -51,53 +73,76 @@ export default {
       currentPageNumber: state => state.posts.currentPageNumber,
       postsPerPage: state => state.posts.postsPerPage,
       morePostsToBeLoaded: state => state.posts.morePostsToBeLoaded,
+      userId: state => state.posts.userIdFilter,
       error: state => state.posts.error,
     }),
     ...mapGetters({
       isLoading: 'loader/isLoading',
     }),
-    showCreatePostForm() {
-      return this.user !== null && this.userId === null;
+    anyFiltersApplied() {
+      return this.userId !== null;
     },
   },
   methods: {
     ...mapMutations({
       setPosts: 'posts/setPosts',
-      resetPosts: 'posts/resetPosts',
       setMorePostsToBeLoaded: 'posts/setMorePostsToBeLoaded',
-      setPostPerPage: 'posts/setPostPerPage',
+      setCurrentPageNumber: 'posts/setCurrentPageNumber',
       setError: 'posts/setError',
+      setUserIdFilter: 'posts/setUserIdFilter',
+      resetState: 'posts/resetState',
       showLoader: 'loader/showLoader',
       hideLoader: 'loader/hideLoader',
     }),
 
-    async loadPosts(pageNumber, perPage) {
-      this.showLoader();
+    async loadPosts() {
+      const pageNumber = this.currentPageNumber;
+      const perPage = this.postsPerPage;
+
       try {
         const postsChunk = await PostsService.getPosts(pageNumber, perPage, this.userId);
         this.setPosts(postsChunk);
+        this.setCurrentPageNumber(this.currentPageNumber + 1);
         // Check if there are more posts to be loaded
-        if (postsChunk.length < perPage) {
+        if (postsChunk.length < this.postsPerPage) {
           this.setMorePostsToBeLoaded(false);
         }
       } catch (error) {
         console.error(error);
         this.setError(error);
       }
+    },
+
+    async loadMorePosts() {
+      this.loadingMore = true;
+
+      await this.loadPosts();
+
+      this.loadingMore = false;
+    },
+
+    resetFilters() {
+      this.resetState();
+      this.initialLoad();
+    },
+
+    async initialLoad() {
+      this.showLoader();
+
+      await this.loadPosts();
+
       this.hideLoader();
     },
   },
-  async mounted() {
-    this.resetPosts();
-    this.setError(null);
+  mounted() {
+    this.resetState();
 
     // Save the user_id if we have it as a filter
     const userId = this.$route.query.user_id;
     if (userId) {
-      this.userId = userId;
+      this.setUserIdFilter(userId);
     }
-
-    this.loadPosts(this.currentPageNumber, this.postsPerPage);
+    this.initialLoad();
   },
   beforeDestroy() {
     if (this.isLoading) {

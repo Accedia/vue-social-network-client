@@ -1,21 +1,18 @@
-const state = {
+const initialState = {
   posts: [],
   currentPageNumber: 1,
   postsPerPage: 5,
   morePostsToBeLoaded: true,
   error: null,
+  userIdFilter: null,
+  dateFilter: null,
 };
 
-const getters = {
-
-};
+const state = { ...initialState };
 
 const mutations = {
   setPosts(state, posts) {
     state.posts = state.posts.concat(posts);
-  },
-  resetPosts(state) {
-    state.posts = [];
   },
   addPost(state, post) {
     state.posts = [
@@ -26,22 +23,30 @@ const mutations = {
   setMorePostsToBeLoaded(state, payload) {
     state.morePostsToBeLoaded = payload;
   },
-  setPostPerPage(state, postsPerPage) {
-    state.postsPerPage = postsPerPage;
-  },
   setError(state, error) {
     state.error = error;
   },
-};
-
-const actions = {
-
+  setCurrentPageNumber(state, newPageNumber) {
+    state.currentPageNumber = newPageNumber;
+  },
+  setUserIdFilter(state, userId) {
+    state.userIdFilter = userId;
+  },
+  setDateFilter(state, date) {
+    state.dateFilter = date;
+  },
+  resetState(state) {
+    Object.keys(state).forEach((key) => {
+      if (Array.isArray(state[key])) {
+        state[key].length = 0;
+      }
+      state[key] = initialState[key];
+    });
+  },
 };
 
 export default {
   namespaced: true,
   state,
-  getters,
   mutations,
-  actions,
 };
