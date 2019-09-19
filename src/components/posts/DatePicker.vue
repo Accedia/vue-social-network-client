@@ -9,7 +9,7 @@
     <template v-slot:activator="{ on }">
       <v-text-field
         v-model="date"
-        label="Picker in dialog"
+        label="Select date"
         prepend-icon="event"
         readonly
         v-on="on"
@@ -30,13 +30,18 @@ export default {
   data() {
     return {
       modal: false,
-      date: new Date().toISOString().substr(0, 10),
+      date: '',
     };
   },
   computed: mapState({
     userId: state => state.posts.userIdFilter,
     dateFilter: state => state.posts.dateFilter,
   }),
+  watch: {
+    dateFilter(val) {
+      this.date = val;
+    },
+  },
   methods: {
     ...mapMutations({
       setDateFilter: 'posts/setDateFilter',
@@ -49,6 +54,7 @@ export default {
         name: 'posts',
         query: queryParams,
       });
+      this.$emit('updated');
     },
 
     buildQueryParams() {
@@ -57,7 +63,7 @@ export default {
         params.userId = this.userId;
       }
       if (this.dateFilter) {
-        params.dateFilter = this.dateFilter;
+        params.date = this.dateFilter;
       }
       return params;
     },

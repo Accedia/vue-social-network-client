@@ -34,7 +34,7 @@
           </v-card-title>
 
           <v-card-text>
-            <date-picker></date-picker>
+            <date-picker @updated="applyDateFilter"></date-picker>
           </v-card-text>
 
           <v-card-actions v-if="anyFiltersApplied">
@@ -74,6 +74,7 @@ export default {
       postsPerPage: state => state.posts.postsPerPage,
       morePostsToBeLoaded: state => state.posts.morePostsToBeLoaded,
       userId: state => state.posts.userIdFilter,
+      dateFilter: state => state.posts.dateFilter,
       error: state => state.posts.error,
     }),
     ...mapGetters({
@@ -90,6 +91,7 @@ export default {
       setCurrentPageNumber: 'posts/setCurrentPageNumber',
       setError: 'posts/setError',
       setUserIdFilter: 'posts/setUserIdFilter',
+      setDateFilter: 'posts/setDateFilter',
       resetState: 'posts/resetState',
       showLoader: 'loader/showLoader',
       hideLoader: 'loader/hideLoader',
@@ -100,7 +102,8 @@ export default {
       const perPage = this.postsPerPage;
 
       try {
-        const postsChunk = await PostsService.getPosts(pageNumber, perPage, this.userId);
+        const postsChunk = await PostsService
+          .getPosts(pageNumber, perPage, this.userId, this.dateFilter);
         this.setPosts(postsChunk);
         this.setCurrentPageNumber(this.currentPageNumber + 1);
         // Check if there are more posts to be loaded
@@ -133,15 +136,26 @@ export default {
 
       this.hideLoader();
     },
+
+    applyDateFilter() {
+      this.resetState(false);
+      this.initialLoad();
+    },
+
+    setInitialFilters() {
+      const userId = this.$route.query.user_id;
+      if (userId) {
+        this.setUserIdFilter(userId);
+      }
+      const dateFilter = this.$route.query.date;
+      if (dateFilter) {
+        this.setDateFilter(dateFilter);
+      }
+    },
   },
   mounted() {
     this.resetState();
-
-    // Save the user_id if we have it as a filter
-    const userId = this.$route.query.user_id;
-    if (userId) {
-      this.setUserIdFilter(userId);
-    }
+    this.setInitialFilters();
     this.initialLoad();
   },
   beforeDestroy() {

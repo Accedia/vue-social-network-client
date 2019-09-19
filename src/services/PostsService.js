@@ -6,17 +6,17 @@ const POSTS_RESOURCE_URL = `${config.BASE_URL}/posts`;
 
 class PostsService {
 
-  getPosts(pageNumber, perPage, userId) {
+  getPosts(pageNumber, perPage, userId, dateFilter) {
     return axios
       .get(POSTS_RESOURCE_URL, {
-        params: this.__buildGetPostsRequestQueryParams(pageNumber, perPage, userId),
+        params: this.__buildGetPostsRequestQueryParams(pageNumber, perPage, userId, dateFilter),
         headers: ApiService.getAuthorizationHeaderForRequest(),
       })
       .then(response => response.data)
       .catch((error) => { throw error.response.data; });
   }
 
-  __buildGetPostsRequestQueryParams(pageNumber, perPage, userId) {
+  __buildGetPostsRequestQueryParams(pageNumber, perPage, userId, dateFilter) {
     const params = {
       _page: pageNumber,
       _limit: perPage,
@@ -26,6 +26,10 @@ class PostsService {
 
     if (userId) {
       params['author.id'] = userId;
+    }
+
+    if (dateFilter) {
+      params.created_at_like = dateFilter;
     }
 
     return params;

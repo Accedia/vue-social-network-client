@@ -35,8 +35,9 @@ const mutations = {
   setDateFilter(state, date) {
     state.dateFilter = date;
   },
-  resetState(state) {
+  resetState(state, resetFilters = true) {
     Object.keys(state).forEach((key) => {
+      if (!resetFilters && key.endsWith('Filter')) return;
       if (Array.isArray(state[key])) {
         state[key].length = 0;
       }
