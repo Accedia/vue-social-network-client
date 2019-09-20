@@ -27,8 +27,10 @@
         {{ post.comments_count }} {{ post.comments_count === 1 ? 'Comment' : 'Comments' }}
       </span>
       <v-spacer></v-spacer>
-      <!-- TODO: Link to the post page -->
-      <v-btn text color="primary">Read all</v-btn>
+      <v-btn
+        color="primary"
+        text
+        :to="{name: 'post-details', params: { post_id: post.id } }">Read all</v-btn>
     </v-card-actions>
   </v-card>
 </template>

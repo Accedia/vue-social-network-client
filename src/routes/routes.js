@@ -1,8 +1,9 @@
 import OuterLayout from '../OuterLayout.vue';
 import Posts from '../pages/Posts.vue';
 import Auth from '../pages/Auth.vue';
-import SingUp from '../pages/Sing-up.vue';
+import SingUp from '../pages/SingUp.vue';
 import UserProfile from '../pages/UserProfile.vue';
+import PostDetails from '../pages/PostDetails.vue';
 
 export default [
   {
@@ -17,6 +18,12 @@ export default [
         path: '',
         name: 'posts',
         component: Posts,
+        exact: true,
+      },
+      {
+        path: '/posts/:post_id',
+        name: 'post-details',
+        component: PostDetails,
         exact: true,
       },
       {
