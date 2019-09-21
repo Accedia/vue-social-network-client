@@ -6,7 +6,14 @@
         <create-post v-if="!anyFiltersApplied" class="mb-10"></create-post>
 
         <div v-if="!isLoading && !error && posts.length > 0">
-          <post-card v-for="post in posts" :key="post.id" :post="post" class="mb-10"></post-card>
+          <post-card v-for="post in posts" :key="post.id" :post="post" class="mb-10">
+            <template #date :post="post">
+              <time-ago :datetime="new Date(post.created_at)" refresh long tooltip></time-ago>
+            </template>
+            <template #content :post="post">
+              <span v-html="post.post"></span>
+            </template>
+          </post-card>
 
           <v-btn
             v-if="morePostsToBeLoaded"
@@ -51,6 +58,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
+import TimeAgo from 'vue2-timeago';
 import PostsService from '../services/PostsService';
 import CreatePost from '../components/posts/CreatePost.vue';
 import PostCard from '../components/posts/PostCard.vue';
@@ -61,6 +69,7 @@ export default {
     CreatePost,
     DatePicker,
     PostCard,
+    TimeAgo,
   },
   data() {
     return {

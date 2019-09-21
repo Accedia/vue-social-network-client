@@ -12,17 +12,16 @@
           </router-link>
         </v-list-item-title>
         <v-list-item-subtitle>
-          <!-- TODO: Link to the post page -->
-          <time-ago :datetime="new Date(post.created_at)" refresh long tooltip></time-ago>
+          <slot name="date"></slot>
         </v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
 
     <v-card-text>
-      <span v-html="post.post"></span>
+      <slot name="content"></slot>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions v-if="!hideActions">
       <span class="body-2 grey--text pl-3">
         {{ post.comments_count }} {{ post.comments_count === 1 ? 'Comment' : 'Comments' }}
       </span>
@@ -36,7 +35,6 @@
 </template>
 
 <script>
-import TimeAgo from 'vue2-timeago';
 import LazyImage from '../common/LazyImage.vue';
 
 export default {
@@ -45,9 +43,12 @@ export default {
       type: Object,
       required: true,
     },
+    hideActions: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: {
-    TimeAgo,
     LazyImage,
   },
 };

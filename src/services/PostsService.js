@@ -16,6 +16,24 @@ class PostsService {
       .catch((error) => { throw error.response.data; });
   }
 
+  getPost(id) {
+    return axios
+      .get(`${POSTS_RESOURCE_URL}/${id}`, {
+        headers: ApiService.getAuthorizationHeaderForRequest(),
+      })
+      .then(response => response.data)
+      .catch((error) => { throw error.response.data; });
+  }
+
+  createPost(post) {
+    return axios
+      .post(POSTS_RESOURCE_URL, { post }, {
+        headers: ApiService.getAuthorizationHeaderForRequest(),
+      })
+      .then(response => response.data)
+      .catch((error) => { throw error.response.data; });
+  }
+
   __buildGetPostsRequestQueryParams(pageNumber, perPage, userId, dateFilter) {
     const params = {
       _page: pageNumber,
@@ -33,15 +51,6 @@ class PostsService {
     }
 
     return params;
-  }
-
-  createPost(post) {
-    return axios
-      .post(POSTS_RESOURCE_URL, { post }, {
-        headers: ApiService.getAuthorizationHeaderForRequest(),
-      })
-      .then(response => response.data)
-      .catch((error) => { throw error.response.data; });
   }
 
 }
