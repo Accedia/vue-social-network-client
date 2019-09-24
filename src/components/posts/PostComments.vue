@@ -1,5 +1,11 @@
 <template>
   <div>
+    <post-add-comment
+      v-if="!loading && !error"
+      :loading="submittingComment"
+      class="mb-5"
+      @submit="addComment"></post-add-comment>
+
     <template v-if="!loading && !error && comments.length > 0">
       <post-card
         v-for="comment in comments"
@@ -34,9 +40,11 @@
 import TimeAgo from 'vue2-timeago';
 import PostCommentsService from '../../services/PostCommentsService';
 import PostCard from './PostCard.vue';
+import PostAddComment from './PostAddComment.vue';
 
 export default {
   components: {
+    PostAddComment,
     PostCard,
     TimeAgo,
   },
@@ -51,6 +59,7 @@ export default {
       comments: [],
       loading: true,
       error: null,
+      submittingComment: false,
     };
   },
   mounted() {
@@ -68,6 +77,19 @@ export default {
       }
 
       this.loading = false;
+    },
+
+    async addComment(text) {
+      this.submittingComment = true;
+
+      try {
+        const comment = await PostCommentsService.addComment(this.postId, text);
+        this.comments.push(comment);
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.submittingComment = false;
     },
   },
 };

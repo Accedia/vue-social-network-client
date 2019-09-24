@@ -14,6 +14,17 @@ class PostCommentsService {
       .catch((error) => { throw error.response.data; });
   }
 
+  addComment(postId, comment) {
+    return axios
+      .post(`${config.BASE_URL}/comments`, {
+        comment,
+      }, {
+        headers: ApiService.getAuthorizationHeaderForRequest(),
+      })
+      .then(response => response.data)
+      .catch((error) => { throw error.response.data; });
+  }
+
   __buildGetCommentsQueryParams(postId) {
     return {
       post_id: postId,
