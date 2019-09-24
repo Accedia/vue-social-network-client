@@ -41,6 +41,11 @@ class AuthService {
     return LocalStorage.remove('user');
   }
 
+  logout() {
+    this.removeUserTokenFromLocalStorage();
+    this.removeUserFromLocalStorage();
+  }
+
 }
 
 export default new AuthService();

@@ -82,7 +82,7 @@ export default {
         this.$store.commit('auth/setToken', token);
         this.$store.commit('auth/setUser', user);
 
-        this.$router.push({ name: 'home' });
+        this.$router.push({ name: 'posts' });
       } catch (err) {
         this.error = err.message || 'Something went wrong. Please try again later';
         console.error(err);

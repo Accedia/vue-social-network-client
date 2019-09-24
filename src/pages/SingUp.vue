@@ -34,8 +34,25 @@
               ></v-text-field>
 
               <v-text-field
+                v-model="firstname"
+                label="First name"
+                name="firstname"
+                type="text"
+                v-validate="'required'"
+                :error="errors.has('signUpForm.firstname')"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="lastname"
+                label="Last name"
+                name="lastname"
+                type="text"
+                v-validate="'required'"
+                :error="errors.has('signUpForm.lastname')"
+              ></v-text-field>
+
+              <v-text-field
                 v-model="password"
-                id="password"
                 label="Password"
                 name="password"
                 type="password"
@@ -45,7 +62,6 @@
 
               <v-text-field
                 v-model="password2"
-                id="password"
                 label="Repeat password"
                 name="password2"
                 type="password"
@@ -91,6 +107,8 @@ export default {
     return {
       username: '',
       email: '',
+      firstname: '',
+      lastname: '',
       password: '',
       password2: '',
       acceptTerms: false,
@@ -110,7 +128,8 @@ export default {
       this.loading = true;
 
       try {
-        await SignUpService.signUp(this.username, this.email, this.password);
+        await SignUpService
+          .signUp(this.username, this.email, this.firstname, this.lastname, this.password);
         this.success = true;
         setTimeout(this.redirectToSignInPage, 5000);
       } catch (err) {
