@@ -19,6 +19,7 @@ class PostCommentsService {
       .post(`${config.BASE_URL}/comments`, {
         comment,
       }, {
+        params: { post_id: postId },
         headers: ApiService.getAuthorizationHeaderForRequest(),
       })
       .then(response => response.data)
