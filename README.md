@@ -32,6 +32,7 @@ https://vue-social-network-api.herokuapp.com
 ### Auth
 `POST /api/auth`
 
+
 #### Body
 ```json
 {
@@ -39,6 +40,7 @@ https://vue-social-network-api.herokuapp.com
   "password": "user"
 }
 ```
+**NOTE: Use these credentials to successfully authenticate**
 
 #### Sample Response
 Status `200 OK`
