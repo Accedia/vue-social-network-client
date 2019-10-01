@@ -35,7 +35,7 @@ https://vue-social-network-api.herokuapp.com
 #### Body
 ```json
 {
-  "username": "user@accedia.com",
+  "username": "user3@accedia.com",
   "password": "user"
 }
 ```
